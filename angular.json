@@ -123,6 +123,11 @@
           }
         }
       }
-    }},
-  "defaultProject": "ngrx-multiple-loaders-on-one-page"
+    }
+  },
+  "defaultProject": "ngrx-multiple-loaders-on-one-page",
+  "cli": {
+    "analytics": "2f6f5998-dcba-480b-9dff-72e6fe9c766c",
+    "defaultCollection": "@ngrx/schematics"
+  }
 }
