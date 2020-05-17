@@ -24,6 +24,117 @@ describe('ApiService', () => {
     expect(service).toBeTruthy();
   });
 
+  describe('#getUser', () => {
+    it('should call .call()', () => {
+      // marbles
+      const call     = '-a';
+      const expected = '-a';
+
+      // spies
+      spyOn(service as any, 'call').and.returnValue(cold(call));
+
+      // expect
+      expect(service.getUser('username')).toBeObservable(cold(expected));
+      expect(service['call']).toHaveBeenCalledTimes(1);
+      expect(service['call']).toHaveBeenCalledWith({
+        endpoint: 'getUser',
+        body: { username: 'username' }
+      });
+    });
+  });
+
+  describe('#getUserSettings', () => {
+    it('should call .call()', () => {
+      // marbles
+      const call     = '-a';
+      const expected = '-a';
+
+      // spies
+      spyOn(service as any, 'call').and.returnValue(cold(call));
+
+      // expect
+      expect(service.getUserSettings()).toBeObservable(cold(expected));
+      expect(service['call']).toHaveBeenCalledTimes(1);
+      expect(service['call']).toHaveBeenCalledWith({
+        endpoint: 'getUser',
+      });
+    });
+  });
+
+  describe('#loading$', () => {
+    it('should return loading status', () => {
+      // marbles
+      const endpoints = '--a--b';
+      const expected =  '--f--t';
+
+      // spies
+      spyOn(service['loadingEndpoints'], 'asObservable').and.returnValue(hot(endpoints, {
+        a: [],
+        b: ['endpoint1', 'endpoint2']
+      }));
+
+      // expect
+      expect(service.loading$).toBeObservable(cold(expected, {
+        t: true,
+        f: false
+      }));
+    });
+  });
+
+  describe('#loadingEndpoints$', () => {
+    it('should return loading status', () => {
+      // marbles
+      const endpoints = '--a--b';
+      const expected =  '--f--t';
+
+      // spies
+      spyOn(service['loadingEndpoints'], 'asObservable').and.returnValue(hot(endpoints, {
+        a: [],
+        b: ['endpoint1', 'endpoint2']
+      }));
+
+      // expect
+      expect(service.loadingEndpoints$(['endpoint1'])).toBeObservable(cold(expected, {
+        t: true,
+        f: false
+      }));
+    });
+    it('should return loading status when multiple endpoints are passed in', () => {
+      // marbles
+      const endpoints = '--a--b';
+      const expected =  '--f--t';
+
+      // spies
+      spyOn(service['loadingEndpoints'], 'asObservable').and.returnValue(hot(endpoints, {
+        a: [],
+        b: ['endpoint1', 'endpoint2']
+      }));
+
+      // expect
+      expect(service.loadingEndpoints$(['endpoint1', 'endpoint2'])).toBeObservable(cold(expected, {
+        t: true,
+        f: false
+      }));
+    });
+    it('should return false loading status when non matching endpoints are passed in', () => {
+      // marbles
+      const endpoints = '--a--b';
+      const expected =  '--f--f';
+
+      // spies
+      spyOn(service['loadingEndpoints'], 'asObservable').and.returnValue(hot(endpoints, {
+        a: [],
+        b: ['endpoint1', 'endpoint2']
+      }));
+
+      // expect
+      expect(service.loadingEndpoints$(['endpoint100'])).toBeObservable(cold(expected, {
+        t: true,
+        f: false
+      }));
+    });
+  });
+
   describe('#call', () => {
     it('should make an http post request', () => {
       // marbles

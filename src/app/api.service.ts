@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { finalize, tap } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 export interface User {
   email: string;
@@ -13,6 +13,7 @@ export interface UserSetting {
 }
 
 export interface ApiServiceCallOptions {
+  body?: object;
   endpoint: string;
 }
 
@@ -22,22 +23,33 @@ export interface ApiServiceCallOptions {
 export class ApiService {
 
   private loadingEndpoints = new BehaviorSubject<Array<string>>([]);
-  public loading$: Observable<boolean>;
 
   constructor(
     private http: HttpClient
   ) { }
 
   public getUser(username: string): Observable<User> {
-
+    return this.call({
+      endpoint: 'getUser',
+      body: { username }
+    });
   }
 
   public getUserSettings(): Observable<UserSetting> {
-
+    return this.call({
+      endpoint: 'getUser',
+    });
   }
 
-  public loadingEndpoints$(): Observable<boolean> {
+  public get loading$(): Observable<boolean> {
+    return this.loadingEndpoints.asObservable().pipe(map((loadingEndpoints) => loadingEndpoints.length > 0));
+  }
 
+  public loadingEndpoints$(endpoints: Array<string>): Observable<boolean> {
+    return this.loadingEndpoints.asObservable().pipe(
+      map((loadingEndpoints) => _.filter(loadingEndpoints, (loadingEndpoint) => _.includes(endpoints, loadingEndpoint))),
+      map((loadingEndpoints) => loadingEndpoints.length > 0)
+    );
   }
 
   private call(options: ApiServiceCallOptions): Observable<any> {
