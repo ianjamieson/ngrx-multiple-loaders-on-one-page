@@ -1,4 +1,5 @@
 import { createAction, props } from '@ngrx/store';
+import { UserSetting } from '../api.service';
 
 export const loadSettings = createAction(
   '[Setting] Load Settings'
@@ -6,7 +7,7 @@ export const loadSettings = createAction(
 
 export const loadSettingsSuccess = createAction(
   '[Setting] Load Settings Success',
-  props<{ data: any }>()
+  props<{ userSetting: UserSetting }>()
 );
 
 export const loadSettingsFailure = createAction(

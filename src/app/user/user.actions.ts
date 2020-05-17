@@ -1,4 +1,5 @@
 import { createAction, props } from '@ngrx/store';
+import { User } from '../api.service';
 
 export const loadUsers = createAction(
   '[User] Load Users'
@@ -6,7 +7,7 @@ export const loadUsers = createAction(
 
 export const loadUsersSuccess = createAction(
   '[User] Load Users Success',
-  props<{ data: any }>()
+  props<{ user: User }>()
 );
 
 export const loadUsersFailure = createAction(
